@@ -1,6 +1,5 @@
 package com.journalApp.controller;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.bson.types.ObjectId;
@@ -17,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.journalApp.api.response.WeatherResponse;
 import com.journalApp.entity.User;
 import com.journalApp.repo.UserRepo;
 import com.journalApp.service.UserService;
+import com.journalApp.service.WeatherService;
 
 @RestController
 @RequestMapping("/user")
@@ -31,6 +32,9 @@ public class UserEntryController {
 	@Autowired
 	private UserRepo userRepo;
 	
+	@Autowired
+	WeatherService weatherService;
+	/*
 	@GetMapping
 	public ResponseEntity<?> getAll(){
 		List<User> all = userService.getAll();
@@ -39,7 +43,7 @@ public class UserEntryController {
     	}
         return new ResponseEntity<>(all,HttpStatus.NOT_FOUND);
 	}
-	
+	*/
 	
 	
 	@GetMapping("/userid/{id}")
@@ -72,5 +76,17 @@ public class UserEntryController {
 			userService.saveNewUser(userInDB);
 		}
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
+	
+	@GetMapping
+	public ResponseEntity<?> greeting(){
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		WeatherResponse weatherResponse = weatherService.getWeather("Mumbai");
+		String greeting= "";
+		if(weatherResponse!=null) {
+			greeting = ", Weather feels like "+ weatherResponse.getCurrent().getFeelslike();
+		}
+		
+		return new ResponseEntity<>("Hi "+ authentication.getName()+ greeting,HttpStatus.OK);
 	}
 }

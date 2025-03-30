@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.journalApp.entity.JournalEntry;
@@ -15,7 +15,7 @@ import com.journalApp.repo.JournalEntryRepo;
 
 import lombok.extern.slf4j.Slf4j;
 @Slf4j
-@Component
+@Service
 public class JournalEntryService {
 	@Autowired
 	private JournalEntryRepo journalRepo;
